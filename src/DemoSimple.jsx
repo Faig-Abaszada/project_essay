@@ -1,3 +1,10 @@
+// todo - pagination
+// todo - delete zamani confirm etmek ucun modal acmaq
+// todo - ad new user button ile modal acmaq ve yeni user yaratmaq
+// todo - Responsive design
+// todo - Export varsa etmek
+
+
 import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -5,7 +12,15 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import {TablePagination} from "@mui/material";
 import Paper from '@mui/material/Paper';
+import {TableFooter} from "@mui/material";
+import {useState} from "react";
+
+// for pagination custom
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
+import Stack from '@mui/material/Stack';
 
 const status = {
     a: { label: 'Active', value: 'a', bg_color: 'green' },
@@ -167,51 +182,102 @@ const columns = [
 
 ];
 
-export default function BasicTable() {
-    return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        {
-                            columns.map((column) => {
-                                return (
-                                    <TableCell key={column.front_end_key}>{column.name}</TableCell>
-                                )
-                            })
-                        }
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => {
-                            return (
-                                <TableRow
-                                    key={row.id}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    {columns.map((column) => {
-                                        const value = row[column.front_end_key]
-                                        {column.front_end_key ? console.log(column.front_end_key) : console.log('no front end key')}
-                                        return (
-                                            <TableCell component="th" scope="row">
-                                                {column.front_end_key === 'action' ? (
-                                                    <div>
-                                                        <button>Settings</button>
-                                                        <button>Delete</button>
-                                                    </div>
-                                                ) : (
-                                                    column.format ? column.format(value) : value
-                                                )}
-                                            </TableCell>
-                                        )
-                                    })}
-                                </TableRow>
-                            )
-                        })
-                    }
 
-                </TableBody>
-            </Table>
-        </TableContainer>
+export default function BasicTable() {
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows =
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    return (
+       <>
+           <TableContainer component={Paper}>
+               <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                   <TableHead>
+                       <TableRow>
+                           {
+                               columns.map((column) => {
+                                   return (
+                                       <TableCell key={column.front_end_key}>{column.name}</TableCell>
+                                   )
+                               })
+                           }
+                       </TableRow>
+                   </TableHead>
+                   <TableBody>
+                       {rows.map((row) => {
+                           return (
+                               <TableRow
+                                   key={row.id}
+                                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                               >
+                                   {columns.map((column) => {
+                                       const value = row[column.front_end_key]
+                                       {column.front_end_key ? console.log(column.front_end_key) : console.log('no front end key')}
+                                       return (
+                                           <TableCell component="th" scope="row">
+                                               {column.front_end_key === 'action' ? (
+                                                   <div>
+                                                       <button>Settings</button>
+                                                       <button>Delete</button>
+                                                   </div>
+                                               ) : (
+                                                   column.format ? column.format(value) : value
+                                               )}
+                                           </TableCell>
+                                       )
+                                   })}
+                               </TableRow>
+                           )
+                       })
+                       }
+
+                   </TableBody>
+                   <TableFooter>
+                       <TableRow>
+                           <TablePagination
+                               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                               colSpan={3}
+                               count={rows.length}
+                               rowsPerPage={rowsPerPage}
+                               page={page}
+                               slotProps={{
+                                   select: {
+                                       inputProps: {
+                                           'aria-label': 'rows per page',
+                                       },
+                                       native: true,
+                                   },
+                               }}
+                               onPageChange={handleChangePage}
+                               onRowsPerPageChange={handleChangeRowsPerPage}
+                           />
+                       </TableRow>
+                   </TableFooter>
+               </Table>
+           </TableContainer>
+           <Stack spacing={2}>
+               <Pagination
+                   count={10}
+                   renderItem={(item) => (
+                       <PaginationItem
+                           slots={{ previous: 'ArrowBackIcon', next: 'ArrowForwardIcon' }}
+                           {...item}
+                       />
+                   )}
+               />
+           </Stack>
+       </>
     );
 }
