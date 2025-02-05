@@ -56,6 +56,7 @@ const rows = [
     {
         id: 1,
         name: 'Faik Abaszada',
+        avatar: 'https://robohash.org/RandomUser.png',
         created_at: '2021-10-10',
         role: 'Admin',
         status: 'a',
@@ -64,6 +65,7 @@ const rows = [
     {
         id: 2,
         name: 'John Doe',
+        avatar: 'https://robohash.org/RandomUser.png',
         created_at: '2021-10-11',
         role: 'User',
         status: 'a',
@@ -72,6 +74,7 @@ const rows = [
     {
         id: 3,
         name: 'Jane Smith',
+        avatar: 'https://robohash.org/RandomUser.png',
         created_at: '2021-10-12',
         role: 'User',
         status: 'a',
@@ -80,6 +83,7 @@ const rows = [
     {
         id: 4,
         name: 'Alice Johnson',
+        avatar: 'https://robohash.org/RandomUser.png',
         created_at: '2021-10-13',
         role: 'Admin',
         status: 'a',
@@ -88,6 +92,7 @@ const rows = [
     {
         id: 5,
         name: 'Bob Brown',
+        avatar: 'https://robohash.org/RandomUser.png',
         created_at: '2021-10-14',
         role: 'User',
         status: 'a',
@@ -96,6 +101,7 @@ const rows = [
     {
         id: 6,
         name: 'Charlie Davis',
+        avatar: 'https://robohash.org/RandomUser.png',
         created_at: '2021-10-15',
         role: 'User',
         status: 'a',
@@ -104,6 +110,7 @@ const rows = [
     {
         id: 7,
         name: 'Diana Evans',
+        avatar: 'https://robohash.org/RandomUser.png',
         created_at: '2021-10-16',
         role: 'Admin',
         status: 'a',
@@ -120,6 +127,7 @@ const rows = [
     {
         id: 9,
         name: 'Frank Green',
+        avatar: 'https://robohash.org/RandomUser.png',
         created_at: '2021-10-18',
         role: 'User',
         status: 'a',
@@ -128,6 +136,7 @@ const rows = [
     {
         id: 10,
         name: 'Grace Harris',
+        avatar: 'https://robohash.org/RandomUser.png',
         created_at: '2021-10-19',
         role: 'Admin',
         status: 'a',
@@ -252,7 +261,8 @@ export default function BasicTable() {
                                            }
                                            return (
                                                <TableCell component="th" scope="row">
-                                                   {column.front_end_key === 'action' ? (
+                                                   {
+                                                       column.front_end_key === 'action' ? (
                                                        <div>
                                                            <IconButton aria-label="delete">
                                                                <MoreHorizIcon/>
@@ -261,9 +271,13 @@ export default function BasicTable() {
                                                                <DeleteIcon/>
                                                            </IconButton>
                                                        </div>
-                                                   ) : (
-                                                       column.format ? column.format(value) : value
-                                                   )}
+                                                   ) : column.front_end_key === 'name' ? (
+                                                           <div className="avatar_wrapper">
+                                                               <img className="avatar" src={row.avatar} alt="avatar"/>
+                                                                <span>{value}</span>
+                                                           </div>
+                                                       ) : (column.format ? column.format(value) : value)
+                                                   }
                                                </TableCell>
                                            )
                                        })}
