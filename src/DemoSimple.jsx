@@ -22,6 +22,14 @@ import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import Stack from '@mui/material/Stack';
 
+import {Button, IconButton} from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
+import SearchInput from "./components/SearchInput.jsx";
+
 const status = {
     a: { label: 'Active', value: 'a', bg_color: 'green' },
     s: { label: 'Suspended', value: 's', bg_color: 'red'},
@@ -202,6 +210,23 @@ export default function BasicTable() {
 
     return (
        <>
+           <div>
+               <SearchInput ></SearchInput>
+           </div>
+           <div>
+               <Button variant="contained" size="medium">
+                   Create new user
+               </Button>
+               <Button variant="outlined" startIcon={<ContentCopyIcon />}>
+                   Duplicate
+               </Button>
+               <Button variant="outlined" startIcon={<DeleteIcon />}>
+                   Delete
+               </Button>
+               <Button variant="outlined" startIcon={<FileDownloadIcon />}>
+                   Export
+               </Button>
+           </div>
            <TableContainer component={Paper}>
                <Table sx={{ minWidth: 650 }} aria-label="simple table">
                    <TableHead>
@@ -229,8 +254,12 @@ export default function BasicTable() {
                                            <TableCell component="th" scope="row">
                                                {column.front_end_key === 'action' ? (
                                                    <div>
-                                                       <button>Settings</button>
-                                                       <button>Delete</button>
+                                                       <IconButton aria-label="delete" >
+                                                           <MoreHorizIcon />
+                                                       </IconButton>
+                                                       <IconButton aria-label="delete" >
+                                                           <DeleteIcon />
+                                                       </IconButton>
                                                    </div>
                                                ) : (
                                                    column.format ? column.format(value) : value
