@@ -4,6 +4,7 @@
 // todo - Responsive design
 // todo - Export varsa etmek
 
+import './assets/styles/components/tableToolbar.scss'
 
 import * as React from 'react';
 import Table from '@mui/material/Table';
@@ -28,7 +29,6 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-import SearchInput from "./components/SearchInput.jsx";
 
 const status = {
     a: { label: 'Active', value: 'a', bg_color: 'green' },
@@ -210,103 +210,104 @@ export default function BasicTable() {
 
     return (
        <>
-           <div>
-               <SearchInput ></SearchInput>
-           </div>
-           <div>
-               <Button variant="contained" size="medium">
-                   Create new user
-               </Button>
-               <Button variant="outlined" startIcon={<ContentCopyIcon />}>
-                   Duplicate
-               </Button>
-               <Button variant="outlined" startIcon={<DeleteIcon />}>
-                   Delete
-               </Button>
-               <Button variant="outlined" startIcon={<FileDownloadIcon />}>
-                   Export
-               </Button>
-           </div>
-           <TableContainer component={Paper}>
-               <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                   <TableHead>
-                       <TableRow>
-                           {
-                               columns.map((column) => {
-                                   return (
-                                       <TableCell key={column.front_end_key}>{column.name}</TableCell>
-                                   )
-                               })
-                           }
-                       </TableRow>
-                   </TableHead>
-                   <TableBody>
-                       {rows.map((row) => {
-                           return (
-                               <TableRow
-                                   key={row.id}
-                                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                               >
-                                   {columns.map((column) => {
-                                       const value = row[column.front_end_key]
-                                       {column.front_end_key ? console.log(column.front_end_key) : console.log('no front end key')}
+           <div className="report-page">
+               <div className="table-toolbar">
+                   <Button variant="contained" size="medium">
+                       Create new user
+                   </Button>
+                   <Button variant="outlined" className="btn btn-outlined" startIcon={<ContentCopyIcon/>}>
+                       Duplicate
+                   </Button>
+                   <Button variant="outlined" className="btn btn-outlined" startIcon={<DeleteIcon/>}>
+                       Delete
+                   </Button>
+                   <Button variant="outlined" className="btn btn-outlined btn-outlined--export" startIcon={<FileDownloadIcon/>}>
+                       Export
+                   </Button>
+               </div>
+               <TableContainer component={Paper}>
+                   <Table sx={{minWidth: 650}} aria-label="simple table">
+                       <TableHead>
+                           <TableRow>
+                               {
+                                   columns.map((column) => {
                                        return (
-                                           <TableCell component="th" scope="row">
-                                               {column.front_end_key === 'action' ? (
-                                                   <div>
-                                                       <IconButton aria-label="delete" >
-                                                           <MoreHorizIcon />
-                                                       </IconButton>
-                                                       <IconButton aria-label="delete" >
-                                                           <DeleteIcon />
-                                                       </IconButton>
-                                                   </div>
-                                               ) : (
-                                                   column.format ? column.format(value) : value
-                                               )}
-                                           </TableCell>
+                                           <TableCell key={column.front_end_key}>{column.name}</TableCell>
                                        )
-                                   })}
-                               </TableRow>
-                           )
-                       })
-                       }
+                                   })
+                               }
+                           </TableRow>
+                       </TableHead>
+                       <TableBody>
+                           {rows.map((row) => {
+                               return (
+                                   <TableRow
+                                       key={row.id}
+                                       sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                   >
+                                       {columns.map((column) => {
+                                           const value = row[column.front_end_key]
+                                           {
+                                               column.front_end_key ? console.log(column.front_end_key) : console.log('no front end key')
+                                           }
+                                           return (
+                                               <TableCell component="th" scope="row">
+                                                   {column.front_end_key === 'action' ? (
+                                                       <div>
+                                                           <IconButton aria-label="delete">
+                                                               <MoreHorizIcon/>
+                                                           </IconButton>
+                                                           <IconButton aria-label="delete">
+                                                               <DeleteIcon/>
+                                                           </IconButton>
+                                                       </div>
+                                                   ) : (
+                                                       column.format ? column.format(value) : value
+                                                   )}
+                                               </TableCell>
+                                           )
+                                       })}
+                                   </TableRow>
+                               )
+                           })
+                           }
 
-                   </TableBody>
-                   <TableFooter>
-                       <TableRow>
-                           <TablePagination
-                               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                               colSpan={3}
-                               count={rows.length}
-                               rowsPerPage={rowsPerPage}
-                               page={page}
-                               slotProps={{
-                                   select: {
-                                       inputProps: {
-                                           'aria-label': 'rows per page',
+                       </TableBody>
+                       <TableFooter>
+                           <TableRow>
+                               <TablePagination
+                                   rowsPerPageOptions={[5, 10, 25, {label: 'All', value: -1}]}
+                                   colSpan={3}
+                                   count={rows.length}
+                                   rowsPerPage={rowsPerPage}
+                                   page={page}
+                                   slotProps={{
+                                       select: {
+                                           inputProps: {
+                                               'aria-label': 'rows per page',
+                                           },
+                                           native: true,
                                        },
-                                       native: true,
-                                   },
-                               }}
-                               onPageChange={handleChangePage}
-                               onRowsPerPageChange={handleChangeRowsPerPage}
+                                   }}
+                                   onPageChange={handleChangePage}
+                                   onRowsPerPageChange={handleChangeRowsPerPage}
+                               />
+                           </TableRow>
+                       </TableFooter>
+                   </Table>
+               </TableContainer>
+               <Stack spacing={2}>
+                   <Pagination
+                       count={10}
+                       renderItem={(item) => (
+                           <PaginationItem
+                               slots={{previous: 'ArrowBackIcon', next: 'ArrowForwardIcon'}}
+                               {...item}
                            />
-                       </TableRow>
-                   </TableFooter>
-               </Table>
-           </TableContainer>
-           <Stack spacing={2}>
-               <Pagination
-                   count={10}
-                   renderItem={(item) => (
-                       <PaginationItem
-                           slots={{ previous: 'ArrowBackIcon', next: 'ArrowForwardIcon' }}
-                           {...item}
-                       />
-                   )}
-               />
-           </Stack>
+                       )}
+                   />
+               </Stack>
+           </div>
        </>
     );
 }

@@ -1,4 +1,4 @@
-import './searchInput.scss'
+// import './searchInput.scss'
 
 export default function SearchInput() {
     return (
@@ -7,18 +7,18 @@ export default function SearchInput() {
                 {/*<icon-component*/}
                 {/*:color="colorUtilities.$black_color_3" icon-name="search" icon-size="23"/>*/}
             </div>
-            {/*<div class="search-area-left">*/}
-            {/*    <div class="search-tag" v-for="tag in searchedTags":key="tag">*/}
-            {/*    <span class="text-body-md">{{tag}}</span>*/}
-            {/*    <icon-component*/}
-            {/*    :color="colorUtilities.$black_color_4"*/}
-            {/*    class="close-icon"*/}
-            {/*    icon-name="close"*/}
-            {/*    icon-size="16" @click.stop="removeTag(tag, 'search')"/>*/}
-            {/*</div>*/}
+            <div className="search-area-left">
+                <div className="search-tag">
+                <span className="text-body-md">{'tag'}</span>
+                </div>
+                {/*<icon-component*/}
+                {/*:color="colorUtilities.$black_color_4"*/}
+                {/*class="close-icon"*/}
+                {/*icon-name="close"*/}
+                {/*icon-size="16" @click.stop="removeTag(tag, 'search')"/>*/}
+            </div>
             <div className="input-area">
                 <input
-                    className="text-body-md"
                     placeholder="Search..."
                     type="text"
                 />
