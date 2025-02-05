@@ -287,27 +287,6 @@ export default function BasicTable() {
                            }
 
                        </TableBody>
-                       <TableFooter>
-                           <TableRow>
-                               <TablePagination
-                                   rowsPerPageOptions={[5, 10, 25, {label: 'All', value: -1}]}
-                                   colSpan={3}
-                                   count={rows.length}
-                                   rowsPerPage={rowsPerPage}
-                                   page={page}
-                                   slotProps={{
-                                       select: {
-                                           inputProps: {
-                                               'aria-label': 'rows per page',
-                                           },
-                                           native: true,
-                                       },
-                                   }}
-                                   onPageChange={handleChangePage}
-                                   onRowsPerPageChange={handleChangeRowsPerPage}
-                               />
-                           </TableRow>
-                       </TableFooter>
                    </Table>
                </TableContainer>
                <Stack spacing={2}>
