@@ -17,6 +17,28 @@
     background-position: center;
 }
 
+.report-page {
+    margin: 1rem;
+
+    > div {
+        margin-bottom: 1rem;
+
+        &:last-child {
+            margin-top: 1rem;
+            margin-bottom: 0;
+        }
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: flex-end;
+
+        & nav ul li:last-child button{
+            margin-right: 0;
+        }
+    }
+}
+
 
 /*:root {*/
 /*  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;*/

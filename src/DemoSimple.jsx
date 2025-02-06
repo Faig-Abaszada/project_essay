@@ -188,7 +188,7 @@ export default function BasicTable() {
                         Export
                     </Button>
                 </div>
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} className="table-container">
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableHead>
                             <TableRow>
@@ -240,13 +240,17 @@ export default function BasicTable() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Pagination
-                    count={Math.ceil(rows.length / rowsPerPage)}
-                    page={page}
-                    onChange={handleChangePage}
-                    color="primary"
-                    showFirstButton showLastButton
-                />
+                <div className="pagination">
+                    <Pagination
+                        count={Math.ceil(rows.length / rowsPerPage)}
+                        page={page}
+                        onChange={handleChangePage}
+                        color="primary"
+                        showFirstButton showLastButton
+                        variant="outlined"
+                        shape="rounded"
+                    />
+                </div>
             </div>
         </>
     );
