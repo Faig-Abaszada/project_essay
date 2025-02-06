@@ -245,6 +245,7 @@ export default function BasicTable() {
                     page={page}
                     onChange={handleChangePage}
                     color="primary"
+                    showFirstButton showLastButton
                 />
             </div>
         </>
