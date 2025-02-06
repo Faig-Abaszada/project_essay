@@ -33,6 +33,9 @@
         display: flex;
         justify-content: flex-end;
 
+        & nav ul li {
+            margin-top: 5px;
+        }
         & nav ul li:last-child button{
             margin-right: 0;
         }
