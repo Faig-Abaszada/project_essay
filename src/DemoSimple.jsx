@@ -1,9 +1,3 @@
-// todo - pagination
-// todo - delete zamani confirm etmek ucun modal acmaq
-// todo - ad new user button ile modal acmaq ve yeni user yaratmaq
-// todo - Responsive design
-// todo - Export varsa etmek
-
 import './assets/styles/components/tableToolbar.scss'
 
 import * as React from 'react';
@@ -13,16 +7,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {TablePagination} from "@mui/material";
 import Paper from '@mui/material/Paper';
-import {TableFooter} from "@mui/material";
 import {useState} from "react";
-
-// for pagination custom
 import Pagination from '@mui/material/Pagination';
-import PaginationItem from '@mui/material/PaginationItem';
-import Stack from '@mui/material/Stack';
-
 import {Button, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -51,7 +38,6 @@ const status = {
     }
     // (status.list()); // [{ value: 'a', label: 'Active' }, { value: 's', label: 'Suspended' }, { value: 'i', label: 'Inactive' }]
 };
-
 const rows = [
     { id: 1, name: 'Faik Abaszada', avatar: 'https://robohash.org/RandomUser.png', created_at: '2021-10-10', role: 'Admin', status: 'a', action: null },
     { id: 2, name: 'John Doe', avatar: 'https://robohash.org/RandomUser.png', created_at: '2021-10-11', role: 'User', status: 'a', action: null },
@@ -160,6 +146,16 @@ const columns = [
 
 ];
 const stickyColumns = ["id", "name"];
+// Helper Function: Get styles dynamically
+const getTableCellStyles = (columnKey, index, stickyColumns) => {
+    const isSticky = stickyColumns.includes(columnKey);
+    return {
+        backgroundColor: isSticky ? "#fff" : "inherit",
+        position: isSticky ? "sticky" : "static",
+        left: isSticky ? `${index * 40}px` : "auto",
+        zIndex: isSticky ? 1500 : "auto",
+    };
+};
 
 export default function BasicTable() {
     const [page, setPage] = useState(1);
@@ -196,13 +192,7 @@ export default function BasicTable() {
                                         return (
                                             <TableCell
                                                 key={column.front_end_key}
-                                                sx={{
-                                                    backgroundColor: stickyColumns.includes(column.front_end_key) ? "#fff" : "inherit",
-                                                    fontWeight: stickyColumns.includes(column.front_end_key) ? "bold" : "normal",
-                                                    position: stickyColumns.includes(column.front_end_key) ? "sticky" : "static",
-                                                    left: stickyColumns.includes(column.front_end_key) ? `${index * 40}px` : "auto",
-                                                    zIndex: stickyColumns.includes(column.front_end_key) ? 1500 : "auto",
-                                                }}
+                                                sx={getTableCellStyles(column.front_end_key, index, stickyColumns)}
                                             >
                                                 {column.name}
                                             </TableCell>
@@ -221,13 +211,7 @@ export default function BasicTable() {
                                                     key={column.front_end_key}
                                                     component="th"
                                                     scope="row"
-                                                    sx={{
-                                                        position: stickyColumns.includes(column.front_end_key) ? "sticky" : "static",
-                                                        left: stickyColumns.includes(column.front_end_key) ? `${index * 40}px` : "auto",
-                                                        backgroundColor: stickyColumns.includes(column.front_end_key) ? "#fff" : "inherit",
-                                                        fontWeight: stickyColumns.includes(column.front_end_key) ? "bold" : "normal",
-                                                        zIndex: stickyColumns.includes(column.front_end_key) ? 1400 : "auto",
-                                                    }}
+                                                    sx={getTableCellStyles(column.front_end_key, index, stickyColumns)}
                                                 >
                                                     {
                                                         column.front_end_key === 'action' ? (
