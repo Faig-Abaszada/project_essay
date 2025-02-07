@@ -3,12 +3,8 @@
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.8); // Transparent white background
-    //display: flex;
-    //flex-direction: column;
-    //justify-content: center;
-    //align-items: center;
-    z-index: 1000; // Ensure overlay is above other content
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
 
     .header-skeleton {
       display: flex;
@@ -21,7 +17,6 @@
 
     .row-skeleton {
       display: flex;
-      //width: 80%;
       margin-top: 10px;
 
       .skeleton-item {
@@ -30,3 +25,22 @@
     }
   }
 
+
+@media (max-width: 768px) {
+  .skeleton-overlay {
+    .header-skeleton,
+    .row-skeleton {
+      width: 100%;
+    }
+
+    .header-skeleton .skeleton-item,
+    .row-skeleton .skeleton-item {
+      flex-basis: 25%;
+    }
+
+    .header-skeleton .skeleton-item:nth-child(n+5),
+    .row-skeleton .skeleton-item:nth-child(n+5) {
+      display: none; // Hide skeleton items after the 4th item
+    }
+  }
+}
