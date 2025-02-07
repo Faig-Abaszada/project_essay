@@ -1,24 +1,29 @@
 import './assets/styles/components/tableToolbar.scss'
 
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+
+// MATERIAL COMPONENTS
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
 import {useState, useEffect} from "react";
 import Pagination from '@mui/material/Pagination';
 import {Button, IconButton} from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
+// CUSTOM COMPONENTS
 import Modal from "./components/Modal.jsx";
 import OverlayLoader from "./components/OverlayLoader.jsx";
 import TableSkeleton from "./components/TableSkeleton.jsx";
 
+// ICONS
+import DeleteIcon from '@mui/icons-material/Delete';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const status = {
     a: { label: 'Active', value: 'a', bg_color: 'green' },
@@ -172,9 +177,8 @@ const getStickyColumnStyles = (columnKey, index, isHeader = false) => {
     };
 };
 
-export default function BasicTable() {
-    const [page, setPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+export default function DemoSimple() {
+    // DATA FETCHING || TABLE DATA
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(true); // Loader for data fetching
     useEffect(() => {
@@ -185,6 +189,15 @@ export default function BasicTable() {
         }, 2000); // Simulating 2-second delay
     }, []);
 
+    // PAGINATION
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+    const [page, setPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const paginatedRows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
+    // DELETE
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false); // Loader state
@@ -210,12 +223,6 @@ export default function BasicTable() {
         }, 1500); // Simulating API delay
     };
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const paginatedRows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-
     return (
         <>
             <div className="report-page">
@@ -235,7 +242,7 @@ export default function BasicTable() {
                 </div>
                 <div className="table">
                     {!loading && (
-                        <TableContainer component={Paper} className="table-container" sx={{ maxHeight: 400 }}>
+                        <TableContainer component={Paper} className="table-container" sx={{ maxHeight: "75vh" }}>
                             <Table stickyHeader sx={{minWidth: 650}} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
