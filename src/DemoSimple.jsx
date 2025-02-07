@@ -8,15 +8,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import Pagination from '@mui/material/Pagination';
 import {Button, IconButton} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ModalComponent from "./components/ModalComponent.jsx";
+import Modal from "./components/Modal.jsx";
 import OverlayLoader from "./components/OverlayLoader.jsx";
+import TableSkeleton from "./components/TableSkeleton.jsx";
 
 
 const status = {
@@ -174,7 +175,15 @@ const getStickyColumnStyles = (columnKey, index, isHeader = false) => {
 export default function BasicTable() {
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [rows, setRows] = useState(rows_data);
+    const [rows, setRows] = useState([]);
+    const [loading, setLoading] = useState(true); // Loader for data fetching
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setRows(rows_data);
+            setLoading(false);
+        }, 2000); // Simulating 2-second delay
+    }, []);
 
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
@@ -224,69 +233,74 @@ export default function BasicTable() {
                         Export
                     </Button>
                 </div>
-                <TableContainer component={Paper} className="table-container" sx={{ maxHeight: 400 }}>
-                    <Table stickyHeader sx={{minWidth: 650}} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                {columns.map((column, index) => {
-                                        return (
-                                            <TableCell
-                                                key={column.front_end_key}
-                                                sx={{
-                                                    ...getStickyHeaderStyles(),
-                                                    ...getStickyColumnStyles(column.front_end_key, index, true)
-                                                }}
-                                            >
-                                                {column.name}
-                                            </TableCell>
-                                        )
-                                    })}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {paginatedRows.map((row) => {
-                                return (
-                                    <TableRow key={row.id}>
+                <div className="table">
+                    {!loading && (
+                        <TableContainer component={Paper} className="table-container" sx={{ maxHeight: 400 }}>
+                            <Table stickyHeader sx={{minWidth: 650}} aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
                                         {columns.map((column, index) => {
-                                            const value = row[column.front_end_key]
                                             return (
                                                 <TableCell
                                                     key={column.front_end_key}
-                                                    component="th"
-                                                    scope="row"
-                                                    sx={getStickyColumnStyles(column.front_end_key, index)}
+                                                    sx={{
+                                                        ...getStickyHeaderStyles(),
+                                                        ...getStickyColumnStyles(column.front_end_key, index, true)
+                                                    }}
                                                 >
-                                                    {
-                                                        column.front_end_key === 'action' ? (
-                                                            <div>
-                                                                <IconButton aria-label="more">
-                                                                    <MoreHorizIcon/>
-                                                                </IconButton>
-                                                                <IconButton
-                                                                    aria-label="delete"
-                                                                    onClick={() => openDeleteModal(row)}
-                                                                >
-                                                                    <DeleteIcon/>
-                                                                </IconButton>
-                                                            </div>
-                                                        ) : column.front_end_key === 'name' ? (
-                                                            <div className="avatar_wrapper">
-                                                                <img className="avatar" src={row.avatar} alt="avatar"/>
-                                                                <span>{value}</span>
-                                                            </div>
-                                                        ) : (column.format ? column.format(value) : value)
-                                                    }
+                                                    {column.name}
                                                 </TableCell>
                                             )
                                         })}
                                     </TableRow>
-                                )
-                            })
-                            }
+                                </TableHead>
+                                <TableBody>
+                                    {paginatedRows.map((row) => {
+                                        return (
+                                            <TableRow key={row.id}>
+                                                {columns.map((column, index) => {
+                                                    const value = row[column.front_end_key]
+                                                    return (
+                                                        <TableCell
+                                                            key={column.front_end_key}
+                                                            component="th"
+                                                            scope="row"
+                                                            sx={getStickyColumnStyles(column.front_end_key, index)}
+                                                        >
+                                                            {
+                                                                column.front_end_key === 'action' ? (
+                                                                    <div>
+                                                                        <IconButton aria-label="more">
+                                                                            <MoreHorizIcon/>
+                                                                        </IconButton>
+                                                                        <IconButton
+                                                                            aria-label="delete"
+                                                                            onClick={() => openDeleteModal(row)}
+                                                                        >
+                                                                            <DeleteIcon/>
+                                                                        </IconButton>
+                                                                    </div>
+                                                                ) : column.front_end_key === 'name' ? (
+                                                                    <div className="avatar_wrapper">
+                                                                        <img className="avatar" src={row.avatar} alt="avatar"/>
+                                                                        <span>{value}</span>
+                                                                    </div>
+                                                                ) : (column.format ? column.format(value) : value)
+                                                            }
+                                                        </TableCell>
+                                                    )
+                                                })}
+                                            </TableRow>
+                                        )
+                                    })
+                                    }
 
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )}
+                    <TableSkeleton loading={loading} rowsPerPage={6} columns={10} />
+                </div>
                 <div className="pagination">
                     <Pagination
                         count={Math.ceil(rows.length / rowsPerPage)}
@@ -299,7 +313,7 @@ export default function BasicTable() {
                     />
                 </div>
             </div>
-            <ModalComponent
+            <Modal
                 open={modalOpen}
                 onClose={closeModal}
                 title="Confirm Delete"
@@ -309,12 +323,12 @@ export default function BasicTable() {
                     <Button onClick={handleDelete} variant="contained" color="error" sx={{ marginRight: 1 }}>
                         Delete
                     </Button>
-                    <Button onClick={closeModal} disable={true} variant="contained" color="secondary" disabled={isDeleting}>
+                    <Button onClick={closeModal} variant="contained" color="secondary" disabled={isDeleting}>
                         Cancel
                     </Button>
                 </div>
                 <OverlayLoader loading={isDeleting} size={80} color="secondary" />
-            </ModalComponent>
+            </Modal>
         </>
     );
 }

@@ -1,0 +1,32 @@
+.skeleton-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.8); // Transparent white background
+    //display: flex;
+    //flex-direction: column;
+    //justify-content: center;
+    //align-items: center;
+    z-index: 1000; // Ensure overlay is above other content
+
+    .header-skeleton {
+      display: flex;
+      margin-bottom: 20px;
+
+      .skeleton-item {
+        margin: 0 5px;
+      }
+    }
+
+    .row-skeleton {
+      display: flex;
+      //width: 80%;
+      margin-top: 10px;
+
+      .skeleton-item {
+        margin: 0 5px;
+      }
+    }
+  }
+

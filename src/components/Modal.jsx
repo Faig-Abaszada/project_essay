@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Box, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import "../assets/styles/components/modalComponent.scss";
+import "../assets/styles/components/modal.scss";
 
 // Reusable Modal Component
 const ModalComponent = ({ open, onClose, title, children }) => {

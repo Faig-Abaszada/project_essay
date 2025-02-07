@@ -29,6 +29,9 @@
         }
     }
 
+    .table {
+        position: relative;
+    }
     .pagination {
         display: flex;
         justify-content: flex-end;
