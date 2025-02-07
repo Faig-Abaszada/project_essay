@@ -25,6 +25,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
+// CONSTANTS | THEY CAN BE MOVED TO A SEPARATE HELPER FILES
 const status = {
     a: { label: 'Active', value: 'a', bg_color: 'green' },
     s: { label: 'Suspended', value: 's', bg_color: 'red'},
@@ -155,6 +156,7 @@ const columns = [
 ];
 const stickyColumns = ["id", "name"];
 
+// STICKY HEADER & COLUMN STYLES || THEY CAN BE MOVED TO A SEPARATE HELPER FILES
 // Function to get sticky header styles
 const getStickyHeaderStyles = () => ({
     backgroundColor: "#fff", // White header
@@ -163,7 +165,6 @@ const getStickyHeaderStyles = () => ({
     top: 0,
     zIndex: 11
 });
-
 // Function to get sticky column styles
 const getStickyColumnStyles = (columnKey, index, isHeader = false) => {
     if (!stickyColumns.includes(columnKey)) return {}; // Return empty if not sticky
