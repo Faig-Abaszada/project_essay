@@ -1,8 +1,17 @@
-# React + Vite
+# React Table Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React application that demonstrates a table with pagination, sticky headers, and sticky columns. It also includes features like data fetching, skeleton loading, and row deletion with a confirmation modal.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Sticky Headers and Columns**: Keeps headers and specified columns fixed while scrolling.
+- **Pagination**: Allows navigation through table data.
+- **Skeleton Loading**: Displays a skeleton screen while data is being fetched.
+- **Row Deletion**: Provides a modal to confirm row deletion.
+- **Styled Components**: Uses `@mui/material` for styling.
+
+## Dependencies
+
+- `react`: JavaScript library for building user interfaces.
+- `@mui/material`: Material-UI components for React.
+- `@mui/icons-material`: Material-UI icons.
