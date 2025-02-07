@@ -15,6 +15,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ModalComponent from "./components/ModalComponent.jsx";
+import OverlayLoader from "./components/OverlayLoader.jsx";
 
 
 const status = {
@@ -38,7 +40,7 @@ const status = {
     }
     // (status.list()); // [{ value: 'a', label: 'Active' }, { value: 's', label: 'Suspended' }, { value: 'i', label: 'Inactive' }]
 };
-const rows = [
+const rows_data = [
     { id: 1, name: 'Faik Abaszada', avatar: 'https://robohash.org/RandomUser.png', created_at: '2021-10-10', role: 'Admin', status: 'a', action: null },
     { id: 2, name: 'John Doe', avatar: 'https://robohash.org/RandomUser.png', created_at: '2021-10-11', role: 'User', status: 'a', action: null },
     { id: 3, name: 'Jane Smith', avatar: 'https://robohash.org/RandomUser.png', created_at: '2021-10-12', role: 'User', status: 'a', action: null },
@@ -153,7 +155,7 @@ const getStickyHeaderStyles = () => ({
     color: "#000", // Black text
     position: "sticky",
     top: 0,
-    zIndex: 1600
+    zIndex: 11
 });
 
 // Function to get sticky column styles
@@ -165,13 +167,39 @@ const getStickyColumnStyles = (columnKey, index, isHeader = false) => {
         color: "#000", //
         position: "sticky",
         left: `${index * 50}px`, // Adjust column width
-        zIndex: isHeader ? 1700 : 1500 // Ensure header is above sticky columns
+        zIndex: isHeader ? 12 : 10 // Ensure header is above sticky columns
     };
 };
 
 export default function BasicTable() {
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rows, setRows] = useState(rows_data);
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false); // Loader state
+    // Open delete confirmation modal
+    const openDeleteModal = (row) => {
+        setSelectedRow(row);
+        setModalOpen(true);
+    };
+    // Close modal
+    const closeModal = () => {
+        setModalOpen(false);
+        setSelectedRow(null);
+        setIsDeleting(false); // Reset loader
+    };
+    // Handle row deletion with a simulated delay for loader
+    const handleDelete = () => {
+        setIsDeleting(true);
+        setTimeout(() => {
+            if (selectedRow) {
+                setRows((prevRows) => prevRows.filter((r) => r.id !== selectedRow.id));
+            }
+            closeModal();
+        }, 1500); // Simulating API delay
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -231,10 +259,13 @@ export default function BasicTable() {
                                                     {
                                                         column.front_end_key === 'action' ? (
                                                             <div>
-                                                                <IconButton aria-label="delete">
+                                                                <IconButton aria-label="more">
                                                                     <MoreHorizIcon/>
                                                                 </IconButton>
-                                                                <IconButton aria-label="delete">
+                                                                <IconButton
+                                                                    aria-label="delete"
+                                                                    onClick={() => openDeleteModal(row)}
+                                                                >
                                                                     <DeleteIcon/>
                                                                 </IconButton>
                                                             </div>
@@ -268,6 +299,22 @@ export default function BasicTable() {
                     />
                 </div>
             </div>
+            <ModalComponent
+                open={modalOpen}
+                onClose={closeModal}
+                title="Confirm Delete"
+            >
+                <p>Are you sure you want to delete <strong>{selectedRow?.name}</strong>?</p>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "20px" }}>
+                    <Button onClick={handleDelete} variant="contained" color="error" sx={{ marginRight: 1 }}>
+                        Delete
+                    </Button>
+                    <Button onClick={closeModal} disable={true} variant="contained" color="secondary" disabled={isDeleting}>
+                        Cancel
+                    </Button>
+                </div>
+                <OverlayLoader loading={isDeleting} size={80} color="secondary" />
+            </ModalComponent>
         </>
     );
 }
