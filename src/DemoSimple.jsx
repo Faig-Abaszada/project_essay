@@ -159,7 +159,7 @@ const columns = [
     }
 
 ];
-
+const stickyColumns = ["id", "name"];
 
 export default function BasicTable() {
     const [page, setPage] = useState(1);
@@ -192,26 +192,43 @@ export default function BasicTable() {
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                {
-                                    columns.map((column) => {
+                                {columns.map((column, index) => {
                                         return (
-                                            <TableCell key={column.front_end_key}>{column.name}</TableCell>
+                                            <TableCell
+                                                key={column.front_end_key}
+                                                sx={{
+                                                    backgroundColor: stickyColumns.includes(column.front_end_key) ? "#fff" : "inherit",
+                                                    fontWeight: stickyColumns.includes(column.front_end_key) ? "bold" : "normal",
+                                                    position: stickyColumns.includes(column.front_end_key) ? "sticky" : "static",
+                                                    left: stickyColumns.includes(column.front_end_key) ? `${index * 40}px` : "auto",
+                                                    zIndex: stickyColumns.includes(column.front_end_key) ? 1500 : "auto",
+                                                }}
+                                            >
+                                                {column.name}
+                                            </TableCell>
                                         )
-                                    })
-                                }
+                                    })}
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {paginatedRows.map((row) => {
                                 return (
-                                    <TableRow
-                                        key={row.id}
-                                        sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                    >
-                                        {columns.map((column) => {
+                                    <TableRow key={row.id}>
+                                        {columns.map((column, index) => {
                                             const value = row[column.front_end_key]
                                             return (
-                                                <TableCell component="th" scope="row">
+                                                <TableCell
+                                                    key={column.front_end_key}
+                                                    component="th"
+                                                    scope="row"
+                                                    sx={{
+                                                        position: stickyColumns.includes(column.front_end_key) ? "sticky" : "static",
+                                                        left: stickyColumns.includes(column.front_end_key) ? `${index * 40}px` : "auto",
+                                                        backgroundColor: stickyColumns.includes(column.front_end_key) ? "#fff" : "inherit",
+                                                        fontWeight: stickyColumns.includes(column.front_end_key) ? "bold" : "normal",
+                                                        zIndex: stickyColumns.includes(column.front_end_key) ? 1400 : "auto",
+                                                    }}
+                                                >
                                                     {
                                                         column.front_end_key === 'action' ? (
                                                             <div>

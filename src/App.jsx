@@ -11,8 +11,8 @@ function App() {
 
   return (
     <>
-      {/*<BasicTable/>*/}
-      <StickyColumnTable/>
+      <BasicTable/>
+      {/*<StickyColumnTable/>*/}
     </>
   )
 }
