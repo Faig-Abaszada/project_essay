@@ -146,20 +146,32 @@ const columns = [
 
 ];
 const stickyColumns = ["id", "name"];
-// Helper Function: Get styles dynamically
-const getTableCellStyles = (columnKey, index, stickyColumns) => {
-    const isSticky = stickyColumns.includes(columnKey);
+
+// Function to get sticky header styles
+const getStickyHeaderStyles = () => ({
+    backgroundColor: "#fff", // White header
+    color: "#000", // Black text
+    position: "sticky",
+    top: 0,
+    zIndex: 1600
+});
+
+// Function to get sticky column styles
+const getStickyColumnStyles = (columnKey, index, isHeader = false) => {
+    if (!stickyColumns.includes(columnKey)) return {}; // Return empty if not sticky
+
     return {
-        backgroundColor: isSticky ? "#fff" : "inherit",
-        position: isSticky ? "sticky" : "static",
-        left: isSticky ? `${index * 40}px` : "auto",
-        zIndex: isSticky ? 1500 : "auto",
+        backgroundColor: "#fff",
+        color: "#000", //
+        position: "sticky",
+        left: `${index * 50}px`, // Adjust column width
+        zIndex: isHeader ? 1700 : 1500 // Ensure header is above sticky columns
     };
 };
 
 export default function BasicTable() {
     const [page, setPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -184,15 +196,18 @@ export default function BasicTable() {
                         Export
                     </Button>
                 </div>
-                <TableContainer component={Paper} className="table-container">
-                    <Table sx={{minWidth: 650}} aria-label="simple table">
+                <TableContainer component={Paper} className="table-container" sx={{ maxHeight: 400 }}>
+                    <Table stickyHeader sx={{minWidth: 650}} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 {columns.map((column, index) => {
                                         return (
                                             <TableCell
                                                 key={column.front_end_key}
-                                                sx={getTableCellStyles(column.front_end_key, index, stickyColumns)}
+                                                sx={{
+                                                    ...getStickyHeaderStyles(),
+                                                    ...getStickyColumnStyles(column.front_end_key, index, true)
+                                                }}
                                             >
                                                 {column.name}
                                             </TableCell>
@@ -211,7 +226,7 @@ export default function BasicTable() {
                                                     key={column.front_end_key}
                                                     component="th"
                                                     scope="row"
-                                                    sx={getTableCellStyles(column.front_end_key, index, stickyColumns)}
+                                                    sx={getStickyColumnStyles(column.front_end_key, index)}
                                                 >
                                                     {
                                                         column.front_end_key === 'action' ? (
