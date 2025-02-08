@@ -3,7 +3,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
+  width: 300px;
   background-color: white;
   padding: 18px;
   border-radius: 8px;
@@ -13,6 +13,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
+
     .modal-title {
       font-size: 20px;
       font-weight: 600;

@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { Button, TextField, MenuItem } from "@mui/material";
+import "../../assets/styles/components/createUserModal.scss";
+import React, {useState} from "react";
+import {Button, TextField, MenuItem} from "@mui/material";
 import Modal from "../Modal";
 import OverlayLoader from "../OverlayLoader";
-import { roles } from "../../constants/roles";
+import {roles} from "../../constants/roles";
 
-export default function CreateUserModal({ open, onClose, addUser }) {
-    const [newUser, setNewUser] = useState({ name: "", email: "", role: "User", status: "a" });
+export default function CreateUserModal({open, onClose, addUser}) {
+    const [newUser, setNewUser] = useState({name: "", email: "", role: "User", status: "a"});
     const [isCreating, setIsCreating] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -32,39 +33,39 @@ export default function CreateUserModal({ open, onClose, addUser }) {
                 role: newUser.role,
                 status: newUser.status
             });
-            setNewUser({ name: "", email: "", role: "User", status: "a" });
+            setNewUser({name: "", email: "", role: "User", status: "a"});
             setIsCreating(false);
             onClose();
         }, 1500);
     };
 
     return (
-        <Modal open={open} onClose={onClose} title="Create New User">
+        <Modal open={open} onClose={onClose} title="Create New User" className="create-user-modal">
             <TextField
                 fullWidth
                 label="Name"
                 value={newUser.name}
-                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                onChange={(e) => setNewUser({...newUser, name: e.target.value})}
                 error={!!errors.name}
                 helperText={errors.name}
-                sx={{ marginBottom: 2 }}
+                sx={{marginBottom: 2}}
             />
             <TextField
                 fullWidth
                 label="Email"
                 value={newUser.email}
-                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                onChange={(e) => setNewUser({...newUser, email: e.target.value})}
                 error={!!errors.email}
                 helperText={errors.email}
-                sx={{ marginBottom: 2 }}
+                sx={{marginBottom: 2}}
             />
             <TextField
                 select
                 fullWidth
                 label="Role"
                 value={newUser.role}
-                onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
-                sx={{ marginBottom: 2 }}
+                onChange={(e) => setNewUser({...newUser, role: e.target.value})}
+                sx={{marginBottom: 2}}
             >
                 {roles.map((role) => (
                     <MenuItem key={role} value={role}>
@@ -72,10 +73,16 @@ export default function CreateUserModal({ open, onClose, addUser }) {
                     </MenuItem>
                 ))}
             </TextField>
-            <Button onClick={handleCreateUser} variant="contained" disabled={isCreating} sx={{ marginTop: 2 }}>
-                Create
-            </Button>
-            <OverlayLoader loading={isCreating} />
+            <div className="buttons">
+                <Button
+                    onClick={handleCreateUser}
+                    variant="contained"
+                    disabled={isCreating}
+                    className="create-user-button">
+                    Create
+                </Button>
+            </div>
+            <OverlayLoader loading={isCreating}/>
         </Modal>
     );
 }
