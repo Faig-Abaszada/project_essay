@@ -12,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import {useState, useEffect} from "react";
 import Pagination from '@mui/material/Pagination';
-import {Button, IconButton} from "@mui/material";
+import {Button, IconButton, TextField, MenuItem } from "@mui/material";
 
 // CUSTOM COMPONENTS
 import Modal from "./components/Modal.jsx";
@@ -47,6 +47,8 @@ const status = {
     }
     // (status.list()); // [{ value: 'a', label: 'Active' }, { value: 's', label: 'Suspended' }, { value: 'i', label: 'Inactive' }]
 };
+
+const roles = ["Admin", "User"];
 const rows_data = [
     { id: 1, name: 'Faik Abaszada', avatar: 'https://robohash.org/RandomUser.png', created_at: '2021-10-10', role: 'Admin', status: 'a', action: null },
     { id: 2, name: 'John Doe', avatar: 'https://robohash.org/RandomUser.png', created_at: '2021-10-11', role: 'User', status: 'a', action: null },
@@ -103,15 +105,20 @@ const columns = [
     {
         front_end_key: 'id',
         back_end_key: 'id',
-        name: 'ID',
-        format: (value) => {
-            return value  + '55';
-        }
+        name: 'ID'
     },
     {
         front_end_key: 'name',
         back_end_key: 'name',
         name: 'Name',
+        format: (value) => {
+            return value;
+        }
+    },
+    {
+        front_end_key: 'email',
+        back_end_key: 'email',
+        name: 'Email',
         format: (value) => {
             return value;
         }
@@ -224,11 +231,52 @@ export default function DemoSimple() {
         }, 1500); // Simulating API delay
     };
 
+    // CREATE NEW USER MODAL
+    const [createModalOpen, setCreateModalOpen] = useState(false);
+    const [newUser, setNewUser] = useState({ name: "", email: "", role: "User", status: "a" });
+    const [isCreating, setIsCreating] = useState(false);
+    const [errors, setErrors] = useState({});
+
+    const openCreateModal = () => {
+        setNewUser({ name: "", email: "", role: "User", status: "a" });
+        setErrors({});
+        setCreateModalOpen(true);
+    };
+
+    const validateForm = () => {
+        let newErrors = {};
+        if (!newUser.name.trim()) newErrors.name = "Name is required";
+        if (!newUser.email.trim() || !/^\S+@\S+\.\S+$/.test(newUser.email))
+            newErrors.email = "Valid email is required";
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleCreateUser = () => {
+        if (!validateForm()) return;
+        setIsCreating(true);
+
+        setTimeout(() => {
+            const newUserData = {
+                id: rows.length + 1,
+                name: newUser.name,
+                email: newUser.email,
+                created_at: new Date().toISOString().split('T')[0],
+                role: newUser.role,
+                status: newUser.status
+            };
+            setRows((prevRows) => [newUserData, ...prevRows]);
+            setCreateModalOpen(false);
+            setIsCreating(false);
+        }, 1500);
+    };
+
+
     return (
         <>
             <div className="report-page">
                 <div className="table-toolbar">
-                    <Button variant="contained" size="medium">
+                    <Button variant="contained" size="medium" onClick={openCreateModal}>
                         Create new user
                     </Button>
                     <Button variant="outlined" className="btn btn-outlined" startIcon={<ContentCopyIcon/>}>
@@ -321,6 +369,7 @@ export default function DemoSimple() {
                     />
                 </div>
             </div>
+            {/* Delete User Modal */}
             <Modal
                 open={modalOpen}
                 onClose={closeModal}
@@ -336,6 +385,35 @@ export default function DemoSimple() {
                     </Button>
                 </div>
                 <OverlayLoader loading={isDeleting} size={80} color="secondary" />
+            </Modal>
+            {/* Create User Modal */}
+            <Modal open={createModalOpen} onClose={() => setCreateModalOpen(false)} title="Create New User">
+                <TextField
+                    fullWidth
+                    label="Name"
+                    value={newUser.name}
+                    onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                    error={!!errors.name}
+                    helperText={errors.name}
+                />
+                <TextField
+                    fullWidth
+                    label="Email"
+                    value={newUser.email}
+                    onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                />
+                <TextField
+                    select
+                    fullWidth
+                    label="Role"
+                    value={newUser.role}
+                    onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}>
+                    {roles.map(role => <MenuItem key={role} value={role}>{role}</MenuItem>)}
+                </TextField>
+                <Button onClick={handleCreateUser} variant="contained" disabled={isCreating}>Create</Button>
+                <OverlayLoader loading={isCreating} />
             </Modal>
         </>
     );
