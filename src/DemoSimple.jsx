@@ -101,65 +101,69 @@ const rows_data = [
     { id: 49, name: 'Daniel Walker', avatar: 'https://robohash.org/RandomUser.png', created_at: '2021-11-27', role: 'User', status: 'a', action: null },
     { id: 50, name: 'Emma Rodriguez', avatar: 'https://robohash.org/RandomUser.png', created_at: '2021-11-28', role: 'Admin', status: 'a', action: null }
 ]
+const formatOrDefault = (value, formatter) => {
+    if (value == null) return '-'; // Handles null and undefined
+    return formatter ? formatter(value) : value;
+};
 const columns = [
     {
         front_end_key: 'id',
         back_end_key: 'id',
-        name: 'ID'
+        name: 'ID',
+        format: formatOrDefault
     },
     {
         front_end_key: 'name',
         back_end_key: 'name',
         name: 'Name',
-        format: (value) => {
-            return value;
-        }
+        format: (value) => formatOrDefault(value, (v) => v.toLowerCase())
     },
     {
         front_end_key: 'email',
         back_end_key: 'email',
         name: 'Email',
-        format: (value) => {
-            return value;
-        }
+        format: formatOrDefault
     },
     {
         front_end_key: 'created_at',
         back_end_key: 'date_created',
         name: 'Date Created',
-        format: (value) => {
-            return value;
-        }
+        format: formatOrDefault
     },
     {
         front_end_key: 'role',
         back_end_key: 'role',
         name: 'Role',
-        format: (value) => {
-            return value;
-        }
+        format: formatOrDefault
     },
     {
         front_end_key: 'status',
         back_end_key: 'status',
         name: 'Status',
-        format: (value) => {
-            return <div>
-                <span style={{ display: 'inline-block', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: status.getByValue(value).bg_color }}>
-                </span>
-                {status.getByValue(value).label}
-            </div>
-        }
+        format: (value) => formatOrDefault(value, (v) => {
+            const statusData = status.getByValue(v);
+            return (
+                <div>
+                    <span
+                        style={{
+                            display: 'inline-block',
+                            width: '10px',
+                            height: '10px',
+                            borderRadius: '50%',
+                            backgroundColor: statusData?.bg_color || 'gray'
+                        }}>
+                    </span>
+                    {statusData?.label || '-'}
+                </div>
+            );
+        })
     },
     {
         front_end_key: 'action',
         back_end_key: 'action',
         name: 'Action',
-        format: (value) => {
-            return value;
-        }
+        format: formatOrDefault
     }
-
 ];
 const stickyColumns = ["id", "name"];
 
@@ -279,10 +283,10 @@ export default function DemoSimple() {
                     <Button variant="contained" size="medium" onClick={openCreateModal}>
                         Create new user
                     </Button>
-                    <Button variant="outlined" className="btn btn-outlined" startIcon={<ContentCopyIcon/>}>
+                    <Button variant="outlined" className="btn btn-outlined" disabled startIcon={<ContentCopyIcon/>}>
                         Duplicate
                     </Button>
-                    <Button variant="outlined" className="btn btn-outlined" startIcon={<DeleteIcon/>}>
+                    <Button variant="outlined" className="btn btn-outlined" disabled startIcon={<DeleteIcon/>}>
                         Delete
                     </Button>
                     <Button variant="outlined" className="btn btn-outlined btn-outlined--export" startIcon={<FileDownloadIcon/>}>
