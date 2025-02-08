@@ -1,11 +1,10 @@
-import UsersPage from "./pages/UsersPage.jsx";
 import "./assets/styles/index.scss";
-// import BasicTable from "./DemoSimple.jsx";
+import UsersPage from "./pages/UsersPage.jsx";
 
 function App() {
-  return (
-    <div className="app-container"><UsersPage/></div>
-  )
+    return (
+        <div className="app-container"><UsersPage/></div>
+    )
 }
 
 export default App
