@@ -1,8 +1,8 @@
-import "../../assets/styles/components/TablePagination.scss";
+import "../../assets/styles/components/tablePagination.scss";
 import React from "react";
 import Pagination from "@mui/material/Pagination";
 
-export default function TablePagination({ count, page, onChange }) {
+export default function TablePagination({count, page, onChange}) {
     return (
         <div className="pagination">
             <Pagination
