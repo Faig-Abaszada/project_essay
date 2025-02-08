@@ -209,7 +209,7 @@ export default function DemoSimple() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const paginatedRows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
-    // DELETE
+    // DELETE USER MODAL
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false); // Loader state

@@ -1,0 +1,16 @@
+.avatar_wrapper {
+  display: flex;
+  align-items: center;
+
+  .avatar {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ccc;
+    background-image: url('https://robohash.org/RandomUser.png');
+    background-size: cover;
+    background-position: center;
+    margin-right: 10px;
+  }
+}

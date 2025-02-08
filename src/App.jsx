@@ -1,8 +1,10 @@
-import BasicTable from "./DemoSimple.jsx";
+import UsersPage from "./pages/UsersPage.jsx";
+import "./assets/styles/index.scss";
+// import BasicTable from "./DemoSimple.jsx";
 
 function App() {
   return (
-    <><BasicTable/></>
+    <div className="app-container"><UsersPage/></div>
   )
 }
 
